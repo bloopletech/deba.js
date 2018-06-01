@@ -1,0 +1,25 @@
+{
+  "name": "deba",
+  "version": "0.5.0",
+  "description": "Deba takes a HTML document or fragment and extracts the textual content into a plaintext format that is easy for humans to read.",
+  "main": "deba.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bloopletech/deba.js.git"
+  },
+  "author": "Brenton \"B-Train\" Fletcher",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bloopletech/deba.js/issues"
+  },
+  "homepage": "https://github.com/bloopletech/deba.js#readme",
+  "dependencies": {
+    "jsdom": "^11.2.0"
+  },
+  "bin": {
+    "deba": "cli.js"
+  }
+}
