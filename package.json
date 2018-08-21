@@ -6,18 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bloopletech/deba.js.git"
-  },
+  "repository": "github:bloopletech/text-kitchen/deba.js",
   "author": "Brenton \"B-Train\" Fletcher",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/bloopletech/deba.js/issues"
-  },
-  "homepage": "https://github.com/bloopletech/deba.js#readme",
+  "license": "MIT",
+  "bugs": "https://github.com/bloopletech/text-kitchen/issues",
+  "homepage": "https://github.com/bloopletech/text-kitchen/tree/master/deba.js",
   "dependencies": {
-    "jsdom": "^11.2.0"
+    "jsdom": "^12.0.0"
   },
   "bin": {
     "deba": "cli.js"
