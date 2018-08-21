@@ -1,6 +1,6 @@
 {
   "name": "deba",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Deba takes a HTML document or fragment and extracts the textual content into a plaintext format that is easy for humans to read.",
   "main": "deba.js",
   "scripts": {
