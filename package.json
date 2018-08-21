@@ -1,12 +1,12 @@
 {
   "name": "deba",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Deba takes a HTML document or fragment and extracts the textual content into a plaintext format that is easy for humans to read.",
   "main": "deba.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": "github:bloopletech/text-kitchen/deba.js",
+  "repository": "github:bloopletech/text-kitchen",
   "author": "Brenton \"B-Train\" Fletcher",
   "license": "MIT",
   "bugs": "https://github.com/bloopletech/text-kitchen/issues",
