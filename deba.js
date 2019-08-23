@@ -60,14 +60,6 @@ var deba = (function() {
     return this.text;
   }
 
-  function FixedSpan(text) {
-    this.text = text;
-  }
-
-  FixedSpan.prototype.toString = function() {
-    return this.text;
-  }
-
   function Pre(segments) {
     this.segments = segments;
   }
@@ -167,7 +159,7 @@ var deba = (function() {
 
   Document.prototype.isPresent = function() {
     for(const segment of this.segments) {
-      if((segment instanceof Span || segment instanceof FixedSpan) && Utils.isPresent(segment.toString())) return true;
+      if(segment instanceof Span && Utils.isPresent(segment.toString())) return true;
     }
     return false;
   }
