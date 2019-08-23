@@ -181,7 +181,7 @@ var deba = (function() {
     this.HEADING_TAGS = ["h1", "h2", "h3", "h4", "h5", "h6"];
     this.BLOCK_INITIATING_TAGS = ["address", "article", "aside", "body", "blockquote", "div", "dd", "dl", "dt", "figure",
       "footer", "header", "li", "main", "nav", "ol", "p", "pre", "section", "td", "th", "ul"];
-    this.ENHANCERS = { b: "*", strong: "*", i: "_", em: "_" };
+    this.ENHANCERS = { b: "**", strong: "**", i: "*", em: "*" };
     this.SKIP_TAGS = ["head", "style", "script", "noscript"];
   }
 
