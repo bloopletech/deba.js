@@ -253,9 +253,9 @@ var deba = (function() {
     }
 
     if(this.ENHANCERS[nodeName]) {
-      this.document.push(new Span(this.ENHANCERS[nodeName]));
+      this.document.push(this.ENHANCERS[nodeName]);
       this.processChildren(node);
-      this.document.push(new Span(this.ENHANCERS[nodeName]));
+      this.document.push(this.ENHANCERS[nodeName]);
 
       return;
     }
