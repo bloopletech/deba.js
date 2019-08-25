@@ -247,7 +247,7 @@ var deba = (function() {
     }
 
     if(node.nodeType == 3) {
-      if(Utils.isPresent(node.textContent)) this.document.push(new Span(node.textContent));
+      this.document.push(new Span(node.textContent));
 
       return;
     }
