@@ -5,6 +5,9 @@ var deba = (function() {
     isPresent: function(text) {
       return text != "" && text.search(/^\s*$/) == -1;
     },
+    escape: function(text) {
+      return text.replace(/([\\`*{}[\]\(\)#+\-!_>~|])/g, '\\$1').replace(/^(\s*\d+)\. /g, '\$1\. ');
+    },
     normalise: function(text) {
       return text.replace(/\s+/g, " ").trim();
     }
@@ -53,12 +56,19 @@ var deba = (function() {
   }
 
   function Span(text) {
-    this.text = text;
+    this.text = Utils.escape(text);
   }
 
   Span.prototype.toString = function() {
     return this.text;
   }
+
+  function EscapedSpan(text) {
+    this.text = text;
+  }
+
+  EscapedSpan.prototype = Object.create(Span.prototype);
+  EscapedSpan.prototype.constructor = EscapedSpan;
 
   function Pre(segments) {
     this.segments = segments;
@@ -253,9 +263,9 @@ var deba = (function() {
     }
 
     if(this.ENHANCERS[nodeName]) {
-      this.document.push(this.ENHANCERS[nodeName]);
+      this.document.push(new EscapedSpan(this.ENHANCERS[nodeName]));
       this.processChildren(node);
-      this.document.push(this.ENHANCERS[nodeName]);
+      this.document.push(new EscapedSpan(this.ENHANCERS[nodeName]));
 
       return;
     }
