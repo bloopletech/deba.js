@@ -55,20 +55,13 @@ var deba = (function() {
     return output.join("");
   }
 
-  function Span(text) {
-    this.text = Utils.escape(text);
+  function Span(text, useRaw) {
+    this.text = useRaw ? text : Utils.escape(text);
   }
 
   Span.prototype.toString = function() {
     return this.text;
   }
-
-  function EscapedSpan(text) {
-    this.text = text;
-  }
-
-  EscapedSpan.prototype = Object.create(Span.prototype);
-  EscapedSpan.prototype.constructor = EscapedSpan;
 
   function Pre(segments) {
     this.segments = segments;
@@ -263,9 +256,9 @@ var deba = (function() {
     }
 
     if(this.ENHANCERS[nodeName]) {
-      this.document.push(new EscapedSpan(this.ENHANCERS[nodeName]));
+      this.document.push(new Span(this.ENHANCERS[nodeName], true));
       this.processChildren(node);
-      this.document.push(new EscapedSpan(this.ENHANCERS[nodeName]));
+      this.document.push(new Span(this.ENHANCERS[nodeName], true));
 
       return;
     }
