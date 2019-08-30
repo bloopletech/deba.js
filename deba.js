@@ -6,7 +6,7 @@ var deba = (function() {
       return text != "" && text.search(/^\s*$/) == -1;
     },
     escape: function(text) {
-      return text.replace(/([\\`*{}[\]\(\)#+\-!_>~|])/g, '\\$1').replace(/^(\s*\d+)\. /g, '\$1\. ');
+      return text.replace(/([\\`*{}[\]\(\)#+\-!_>~|])/g, '\\$1').replace(/^(\s*\d+)\. /g, '$1\\. ');
     },
     normalise: function(text) {
       return text.replace(/\s+/g, " ").trim();
