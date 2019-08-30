@@ -265,10 +265,7 @@ var deba = (function() {
     }
 
     if(this.options.images && nodeName == "img") {
-      this.document.break(Paragraph);
-      this.document.push(new Span(node.src));
-      this.document.break(Paragraph);
-
+      this.document.push(new Span("![" + Utils.escape(node.alt) + "](" + node.src + ")", true));
       return;
     }
 
