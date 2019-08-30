@@ -195,6 +195,7 @@ var deba = (function() {
   Extractor.prototype.extract = function() {
     this.justAppendedBr = false;
     this.inBlockquote = false;
+    this.groupWithNext = false;
 
     this.document = new Document(this);
 
@@ -275,8 +276,7 @@ var deba = (function() {
       this.inBlockquote = true;
 
       this.document.break(Paragraph);
-      this.processChildren(node);
-      this.document.break(Paragraph);
+      this.processFlowContent(node);
 
       this.inBlockquote = false;
 
@@ -292,25 +292,20 @@ var deba = (function() {
       }
 
       this.document.break(ListItem, node.nextElementSibling == null, index);
-      this.processChildren(node);
-      this.document.break(Paragraph);
+      this.processFlowContent(node);
 
       return;
     }
 
     if(nodeName == "dt") {
       this.document.break(DefinitionTerm);
-      this.processChildren(node);
-      this.document.break(Paragraph);
-
+      this.processFlowContent(node);
       return;
     }
 
     if(nodeName == "dd") {
       this.document.break(DefinitionDescription, node.nextElementSibling == null);
-      this.processChildren(node);
-      this.document.break(Paragraph);
-
+      this.processFlowContent(node);
       return;
     }
 
@@ -332,7 +327,8 @@ var deba = (function() {
 
     //These tags terminate the current paragraph, if present, and start a new paragraph
     if(this.BLOCK_INITIATING_TAGS.includes(nodeName)) {
-      this.document.break(Paragraph);
+      if(this.groupWithNext) this.groupWithNext = false;
+      else this.document.break(Paragraph);
       this.processChildren(node);
       this.document.break(Paragraph);
 
@@ -349,6 +345,13 @@ var deba = (function() {
 
     //Pretend that the children of this node were siblings of this node (move them one level up the tree)
     this.processChildren(node);
+  }
+
+  Extractor.prototype.processFlowContent = function(node) {
+    this.groupWithNext = true;
+    this.processChildren(node);
+    this.groupWithNext = false;
+    this.document.break(Paragraph);
   }
 
   Extractor.prototype.processChildren = function(node) {
