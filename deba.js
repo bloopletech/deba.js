@@ -6,7 +6,17 @@ var deba = (function() {
       return text != "" && text.search(/^\s*$/) == -1;
     },
     escape: function(text) {
-      return text.replace(/([\\`*{}[\]\(\)#+\-!_>~|])/g, '\\$1').replace(/^(\s*\d+)\. /g, '$1\\. ');
+      /*
+      Escaping that needs to be done all the time.
+      Of the ASCII punctuation that can be escaped in Markdown, the following can be ignored:
+      '!', because it only has meaning before a '[' or after a '<', and both of those will be escaped
+      '(' and ')', because they only have meaning after ']', which will be escaped.
+      */
+      text = text.replace(/([\\`*{}[\]#+\-_>~|])/g, '\\$1');
+      //Conditional escaping for the '.' following a number that would start an ordinal list item
+      text = text.replace(/^(\s*\d+)\. /g, '$1\\. ');
+
+      return text;
     },
     normalise: function(text) {
       return text.replace(/\s+/g, " ").trim();
