@@ -1,6 +1,6 @@
 {
   "name": "deba",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Deba takes a HTML document or fragment and extracts the textual content into a subset of Markdown.",
   "main": "deba.js",
   "scripts": {
