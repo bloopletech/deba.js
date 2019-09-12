@@ -153,14 +153,6 @@ var deba = (function() {
     this.segments.push(segment);
   }
 
-  Document.prototype.pop = function() {
-    this.segments.pop();
-  }
-
-  Document.prototype.last = function() {
-    return this.segments[this.segments.length - 1];
-  }
-
   Document.prototype.break = function() {
     this.finish();
     this.start(Array.prototype.slice.call(arguments));
@@ -275,12 +267,13 @@ var deba = (function() {
     }
 
     if(this.ENHANCERS[nodeName]) {
+      if(!Utils.isPresent(node.textContent)) return;
+
       var enhancer = new Span(this.ENHANCERS[nodeName], true);
 
       this.document.push(enhancer);
       this.processChildren(node);
-      if(this.document.last() == enhancer) this.document.pop();
-      else this.document.push(enhancer);
+      this.document.push(enhancer);
 
       return;
     }
