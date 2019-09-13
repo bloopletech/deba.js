@@ -191,6 +191,8 @@ var deba = (function() {
     this.nodes = this.arrayify(input).map(this.convertNode);
     this.options = options || {};
 
+    this.textProperty = this.nodes.length && ("innerText" in this.nodes[0] ? "innerText" : "textContent");
+
     this.HEADING_TAGS = ["h1", "h2", "h3", "h4", "h5", "h6"];
     this.BLOCK_INITIATING_TAGS = ["address", "article", "aside", "body", "blockquote", "div", "dd", "dl", "dt", "figure",
       "footer", "header", "li", "main", "nav", "ol", "p", "pre", "section", "td", "th", "ul"];
@@ -225,7 +227,7 @@ var deba = (function() {
 
   Extractor.prototype.convertNode = function(input) {
     var type = input.constructor.name;
-    if(type == "Document") return input.documentElement;
+    if(type == "Document" || type == "HTMLDocument") return input.documentElement;
     else if(type == "Window") return input.document.documentElement;
     else return input;
   }
@@ -267,7 +269,7 @@ var deba = (function() {
     }
 
     if(this.ENHANCERS[nodeName]) {
-      if(!Utils.isPresent(node.textContent)) return;
+      if(!Utils.isPresent(node[this.textProperty])) return;
 
       var enhancer = new Span(this.ENHANCERS[nodeName], true);
 
