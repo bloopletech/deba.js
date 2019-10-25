@@ -191,13 +191,36 @@ var deba = (function() {
     this.nodes = this.arrayify(input).map(this.convertNode);
     this.options = options || {};
 
-    this.textProperty = this.nodes.length && ("innerText" in this.nodes[0] ? "innerText" : "textContent");
+    if(!this.nodes.length) return;
+
+    this.textProperty = ("innerText" in this.nodes[0] ? "innerText" : "textContent");
+    this.domDocument = this.nodes[0].ownerDocument;
+    this.isDomReal = !this.domDocument.hidden;
+
+    this.pageBounds = this.getPageBounds();
 
     this.HEADING_TAGS = ["h1", "h2", "h3", "h4", "h5", "h6"];
     this.BLOCK_INITIATING_TAGS = ["address", "article", "aside", "body", "blockquote", "div", "dd", "dl", "dt", "figure",
       "footer", "header", "li", "main", "nav", "ol", "p", "pre", "section", "td", "th", "ul"];
     this.ENHANCERS = { b: "**", strong: "**", i: "*", em: "*" };
     this.SKIP_TAGS = ["head", "style", "script", "noscript"];
+  }
+
+  Extractor.prototype.getPageBounds = function() {
+    if(!this.isDomReal || !this.options.excludeHidden) return null;
+
+    let tallestHeight = 0;
+    for(const element of this.domDocument.documentElement.querySelectorAll("*")) {
+      const elementHeight = element.scrollHeight;
+      if(elementHeight > tallestHeight) tallestHeight = elementHeight;
+    }
+
+    return {
+      top: 0,
+      right: this.domDocument.documentElement.scrollWidth,
+      bottom: tallestHeight,
+      left: 0
+    };
   }
 
   Extractor.prototype.blocks = function() {
@@ -242,6 +265,8 @@ var deba = (function() {
         if(node.matches(selector)) return;
       }
     }
+
+    if(this.options.excludeHidden && !this.isElementVisible(node)) return;
 
     //Handle repeated brs by making a paragraph break
     if(nodeName == "br") {
@@ -369,6 +394,23 @@ var deba = (function() {
 
   Extractor.prototype.processChildren = function(node) {
     for(const child of node.childNodes) this.process(child);
+  }
+
+  Extractor.prototype.isElementVisible = function(node) {
+    if(!this.isDomReal) return true;
+
+    if(node.nodeType != 1) return true;
+
+    const window = node.ownerDocument.defaultView;
+    const styles = window.getComputedStyle(node);
+
+    //Per "NOTE:" at https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
+    if(node.offsetParent == null && styles.position != "fixed" && !node.matches("html, body")) return false;
+
+    const nodeBounds = node.getBoundingClientRect();
+
+    return (nodeBounds.left < this.pageBounds.right && nodeBounds.right > this.pageBounds.left &&
+      nodeBounds.top < this.pageBounds.bottom && nodeBounds.bottom > this.pageBounds.top);
   }
 
   Extractor.prototype.isInBlockquote = function() {
