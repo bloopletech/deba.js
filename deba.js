@@ -204,6 +204,7 @@ var deba = (function() {
       "footer", "header", "li", "main", "nav", "ol", "p", "pre", "section", "td", "th", "ul"];
     this.ENHANCERS = { b: "**", strong: "**", i: "*", em: "*" };
     this.SKIP_TAGS = ["head", "style", "script", "noscript"];
+    this.BREAK_TAGS_QUERY = (this.HEADING_TAGS.concat(this.BLOCK_INITIATING_TAGS)).join(", ");
   }
 
   Extractor.prototype.getPageBounds = function() {
@@ -307,6 +308,21 @@ var deba = (function() {
 
     if(this.options.images && nodeName == "img") {
       this.document.push(new Span("![" + Utils.escape(node.alt) + "](" + node.src + ")", true));
+      return;
+    }
+
+    if(this.options.links && nodeName == "a") {
+      if(!Utils.isPresent(node[this.textProperty])) return;
+
+      if(node.querySelectorAll(this.BREAK_TAGS_QUERY).length) {
+        this.processChildren(node);
+        return;
+      }
+
+      this.document.push(new Span("[", true));
+      this.processChildren(node);
+      this.document.push(new Span("](" + node.href + ")", true));
+
       return;
     }
 
