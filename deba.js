@@ -189,7 +189,7 @@ var deba = (function() {
 
   function Extractor(input, options) {
     this.nodes = this.arrayify(input).map(this.convertNode);
-    this.options = options || {};
+    this.options = Object.assign({ images: true, links: true, excludeHidden: true }, options);
 
     if(!this.nodes.length) return;
 
