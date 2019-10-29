@@ -6,7 +6,7 @@ const deba = require(path.resolve(__dirname, "./deba.js"));
 const { JSDOM } = require("jsdom");
 
 function serialize(jsdom) {
-  process.stdout.write(deba(jsdom.window.document, { images: true, links: true }) + "\n");
+  process.stdout.write(deba(jsdom.window.document) + "\n");
 }
 
 const arg = process.argv[2];
