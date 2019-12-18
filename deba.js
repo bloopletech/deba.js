@@ -413,15 +413,17 @@ var deba = (function() {
   }
 
   Extractor.prototype.isElementVisible = function(node) {
+    //It's only possible to determine if an element is visible if we have access to a real browser layout engine.
     if(!this.isDomReal) return true;
 
+    //Only elements can be hidden/visible; the concept doesn't make sense for other node types
     if(node.nodeType != 1) return true;
+
+    //If an element doesn't have a width or a height and doesn't generate any boxes, then it's definitely hidden
+    if(!node.offsetWidth && !node.offsetHeight && !node.getClientRects().length) return false;
 
     const window = node.ownerDocument.defaultView;
     const styles = window.getComputedStyle(node);
-
-    //Per "NOTE:" at https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
-    if(node.offsetParent == null && styles.position != "fixed" && !node.matches("html, body")) return false;
 
     const nodeBounds = node.getBoundingClientRect();
 
