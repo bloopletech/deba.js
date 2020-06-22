@@ -7,13 +7,60 @@ var deba = (function() {
     },
     escape: function(text) {
       /*
-      Escaping that needs to be done all the time.
-      Of the ASCII punctuation that can be escaped in Markdown, the following can be ignored:
-      '!', because it only has meaning before a '[' or after a '<', and both of those will be escaped
-      '(' and ')', because they only have meaning after ']', which will be escaped.
+      From the Commonmark spec, version 0.29:
+      An ASCII punctuation character is !, ", #, $, %, &, ', (, ), *, +, ,, -, ., / (U+0021–2F), :, ;, <, =, >, ?, @ (U+003A–0040), [, \, ], ^, _, ` (U+005B–0060), {, |, }, or ~ (U+007B–007E).
+
+      Breaking this up into characters that need to be escaped all the time:
+      * because it can mean emphasis and also can mean a list marker
+      < because it can mean a HTML open tag or HTML close tag
+      [ because it can mean a link title or image title
+      \ because it can escape the following character
+      _ because it can mean emphasis
+      ` because it can mean a code fence
+      ~ because it can mean a code fence
+
+      Characters that need to be escaped if they are the start of a block (with optional leading whitespace):
+      # because it can be a heading start
+      + because it can be a list marker
+      - because it can be a list marker
+      = because it can be a heading start
+      > because it can be a blockquote marker
+
+      Characters that need to be escaped in certain situations:
+      & when it is followed by some characters and then a semicolon
+      . when it is preceded by a number, because then it can be a list item
+
+      Characters that can be ignored:
+      ! because it only has meaning before a '[' or after a '<', and both of those will be escaped
+      " because it only has meaning in HTML attributes and link titles, both of which will be escaped
+      $ because it has no special meaning
+      % because it has no special meaning
+      ' because it only has meaning in HTML attributes and link titles, both of which will be escaped
+      ( because it only has meaning in links and images, both of which will be escaped
+      ) because it only has meaning in links and images, both of which will be escaped
+      , because it has no special meaning
+      / because it only has meaning in a HTML close tag, which will be escaped
+      : because it only has meaning in links and HTML tags, both of which will be escaped
+      ; because it only has meaning in HTML entities, which will be escaped
+      ? because it has no special meaning
+      @ because it has no special meaning
+      ] because it only has meaning in links and images, both of which will be escaped
+      ^ because it has no special meaning
+      { because it has no special meaning
+      | because it has no special meaning
+      } because it has no special meaning
       */
-      text = text.replace(/([\\`*{}[\]#+\-_>~|])/g, '\\$1');
-      //Conditional escaping for the '.' following a number that would start an ordinal list item
+
+      //Escaping that needs to be done all the time.
+      text = text.replace(/([*<\[\\_`~])/g, '\\$1');
+
+      //Escaping that needs to be done at the start of a block.
+      text = text.replace(/^(\s*?)([#+\-=>])/g, '$1\\$2');
+
+      //Escaping that needs to happen in certain situations
+      //Conditional escaping for the '&' that begins a HTML entity.
+      text = text.replace(/(&.*?;)/g, '\\$1');
+      //Conditional escaping for the '.' following a number that would start an ordinal list item.
       text = text.replace(/^(\s*\d+)\. /g, '$1\\. ');
 
       return text;
