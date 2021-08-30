@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
-var path = require('path');
-const deba = require(path.resolve(__dirname, "./deba.js"));
+import { default as deba, Utils } from "./deba.js";
 
-const { JSDOM } = require("jsdom");
+import { JSDOM } from "jsdom";
 
 function serialize(jsdom) {
   process.stdout.write(deba(jsdom.window.document) + "\n");

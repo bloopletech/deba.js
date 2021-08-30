@@ -2,6 +2,7 @@
   "name": "deba",
   "version": "0.15.0",
   "description": "Deba takes a HTML document or fragment and extracts the textual content into a subset of Markdown.",
+  "type": "module",
   "main": "deba.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
